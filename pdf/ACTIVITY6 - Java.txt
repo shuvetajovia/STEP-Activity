@@ -1,0 +1,80 @@
+ACTIVITY 6: Testing the Account Class with Exceptions
+
+Objective
+Write a test class that handles exceptions thrown by the enhanced Account class.
+
+Requirements
+Create a test class TestAccountExceptions.java that:
+1. Tests all scenarios with proper try-catch blocks
+2. Displays informative messages when exceptions occur
+3. Shows both success and failure cases
+4. Demonstrates proper exception handling
+
+Expected Output
+When you run your test class, the output should look like this:
+
+============================================================
+ACCOUNT TEST WITH EXCEPTIONS
+============================================================
+
+>>> Test 1: Valid Account Creation
+SUCCESS: Account #1001 | John Doe (25 yrs) | Savings | ₹1000.0 | Active | PIN: No
+>>> Test 2: Invalid Age (under 18)
+EXCEPTION: Customer must be at least 18 years old. Provided: 16
+>>> Test 3: Invalid Account Type
+EXCEPTION: Account type must be 'Savings' or 'Current'. Provided: Invalid
+>>> Test 4: Minimum Balance on Creation
+
+Creating Savings account with ₹300
+EXCEPTION: Savings account requires minimum balance of ₹500.0. Provided: ₹300.0
+>>> Test 5: Valid Deposit and Withdrawal
+Account: Account #1005 | Alice Brown (30 yrs) | Current | ₹1000.0 | Active | PIN: No
+Setting PIN 1234: SUCCESS
+Depositing ₹500.0: SUCCESS
+Balance after deposit: ₹1500.0
+Withdrawing ₹200.0: SUCCESS
+Balance after withdrawal: ₹1300.0
+Account #1005 | Alice Brown (30 yrs) | Current | ₹1300.0 | Active | PIN: Yes
+>>> Test 6: Invalid Deposit (Negative Amount)
+Attempting to deposit ₹-100.0
+EXCEPTION: Deposit amount must be positive. Provided: ₹-100.0
+>>> Test 7: Insufficient Balance
+Account: Account #1006 | Charlie Green (35 yrs) | Savings | ₹500.0 | Active | PIN: Yes
+Attempting to withdraw ₹1000.0
+EXCEPTION: Insufficient balance. Available: ₹500.0, Requested: ₹1000.0
+>>> Test 8: Minimum Balance Violation
+Account: Account #1007 | Diana Prince (28 yrs) | Savings | ₹1000.0 | Active | PIN: Yes
+Attempting to withdraw ₹600.0
+EXCEPTION: Cannot withdraw. Minimum balance of ₹500.0 required. Available after withdrawal: ₹400.0
+>>> Test 9: Inactive Account Operations
+Account: Account #1008 | Eve Wilson (32 yrs) | Current | ₹2000.0 | Active | PIN: No
+Closing account: SUCCESS
+Attempting to deposit ₹100.0 on closed account
+EXCEPTION: Account is inactive. Please reopen the account or contact support.
+Reopening account: SUCCESS
+Depositing ₹100.0 after reopen: SUCCESS
+Balance after deposit: ₹2100.0
+>>> Test 10: PIN Verification
+Account: Account #1009 | Frank Miller (40 yrs) | Savings | ₹1500.0 | Active | PIN: No
+Setting PIN 1234: SUCCESS
+Withdrawing ₹200.0 with correct PIN: SUCCESS
+
+Balance: ₹1300.0
+Attempting to withdraw ₹100.0 with incorrect PIN (9999)
+EXCEPTION: Incorrect PIN
+Attempting to withdraw ₹100.0 without PIN set
+EXCEPTION: PIN not set for this account
+>>> Test 11: All Accounts Summary
+Account #1001 | John Doe (25 yrs) | Savings | ₹1000.0 | Active | PIN: No
+Account #1005 | Alice Brown (30 yrs) | Current | ₹1300.0 | Active | PIN: Yes
+Account #1006 | Charlie Green (35 yrs) | Savings | ₹500.0 | Active | PIN: Yes
+Account #1007 | Diana Prince (28 yrs) | Savings | ₹1000.0 | Active | PIN: Yes
+Account #1008 | Eve Wilson (32 yrs) | Current | ₹2100.0 | Active | PIN: No
+Account #1009 | Frank Miller (40 yrs) | Savings | ₹1300.0 | Active | PIN: Yes
+============================================================
+TEST COMPLETED!
+============================================================
+
+Task
+Write the complete TestAccountExceptions class in a file called TestAccountExceptions.java.
+Handle all exceptions with try-catch blocks.

@@ -112,14 +112,30 @@ In this activity, the `Account` class is updated to use robust Exception Handlin
 
 ---
 
+## 📅 Activity 6: Testing the Account Class with Exceptions
+
+### 📄 File: [TestAccountExceptions.java](file:///c:/Users/Admin/Downloads/activity/TestAccountExceptions.java)
+
+### 🔍 Description
+A comprehensive test suite (`TestAccountExceptions`) that validates the exception-handling model built in Activity 5. It runs scenarios with structured `try-catch` blocks and logs detailed, user-friendly messages for both validation failures and operational exception states.
+
+### 🛠️ Features & Requirements
+*   Uses `try-catch` blocks for all error-testing paths.
+*   Asserts constructor exception throws (underage checks, invalid types, below minimum balance bounds).
+*   Validates deposit and withdrawal exceptions (`InvalidAmountException`, `InsufficientBalanceException`, `MinimumBalanceViolationException`, `InactiveAccountException`, `InvalidPinException`).
+*   Displays formatted console logs detailing both `SUCCESS` flows and `EXCEPTION` events with parameter dumps.
+*   Prints a complete successful account summary at the conclusion of execution.
+
+---
+
 ## 🚀 Compilation & Running
 
 To compile and run the application tests, execute the following commands in your terminal:
 
 ```powershell
-# Compile all source files (including exceptions)
+# Compile all source files (including exceptions and tests)
 javac AccountException.java InactiveAccountException.java InsufficientBalanceException.java InvalidAmountException.java InvalidPinException.java MinimumBalanceViolationException.java Account.java TestAccountExceptions.java AccountEnhanced.java TestAccountEnhanced.java
 
-# Run the exceptions test runner (Activity 5)
+# Run the exceptions test runner (Activity 6)
 java TestAccountExceptions
 ```

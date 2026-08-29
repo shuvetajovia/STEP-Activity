@@ -33,20 +33,20 @@ public class Account {
         
         // Validate age
         if (age < MIN_AGE) {
-            throw new IllegalArgumentException("Age must be at least " + MIN_AGE);
+            throw new IllegalArgumentException("Customer must be at least " + MIN_AGE + " years old. Provided: " + age);
         }
         this.age = age;
         
         // Validate account type
         if (accountType == null || !VALID_TYPES.contains(accountType)) {
-            throw new IllegalArgumentException("Invalid account type: " + accountType);
+            throw new IllegalArgumentException("Account type must be 'Savings' or 'Current'. Provided: " + accountType);
         }
         this.accountType = accountType;
         
         // Validate minimum balance
         double minBalance = getMinimumBalance();
         if (initialBalance < minBalance) {
-            throw new IllegalArgumentException("Initial balance below minimum for " + accountType + " account (" + minBalance + ")");
+            throw new IllegalArgumentException(accountType + " account requires minimum balance of ₹" + minBalance + ". Provided: ₹" + initialBalance);
         }
         this.balance = initialBalance;
         
@@ -61,7 +61,7 @@ public class Account {
     
     private void validateActive() throws InactiveAccountException {
         if (!"Active".equals(this.status)) {
-            throw new InactiveAccountException("Account is inactive");
+            throw new InactiveAccountException("Account is inactive. Please reopen the account or contact support.");
         }
     }
     
@@ -72,7 +72,7 @@ public class Account {
         validateActive();
         
         if (amount <= 0) {
-            throw new InvalidAmountException("Deposit amount must be positive");
+            throw new InvalidAmountException("Deposit amount must be positive. Provided: ₹" + amount);
         }
         
         this.balance += amount;
@@ -87,7 +87,7 @@ public class Account {
         validateActive();
         
         if (this.pin == null) {
-            throw new InvalidPinException("PIN not set");
+            throw new InvalidPinException("PIN not set for this account");
         }
         
         if (this.pin != pin) {
@@ -95,16 +95,16 @@ public class Account {
         }
         
         if (amount <= 0) {
-            throw new InvalidAmountException("Withdrawal amount must be positive");
+            throw new InvalidAmountException("Withdrawal amount must be positive. Provided: ₹" + amount);
         }
         
         if (amount > this.balance) {
-            throw new InsufficientBalanceException("Insufficient balance");
+            throw new InsufficientBalanceException("Insufficient balance. Available: ₹" + this.balance + ", Requested: ₹" + amount);
         }
         
         double minBalance = getMinimumBalance();
         if (this.balance - amount < minBalance) {
-            throw new MinimumBalanceViolationException("Minimum balance violation");
+            throw new MinimumBalanceViolationException("Cannot withdraw. Minimum balance of ₹" + minBalance + " required. Available after withdrawal: ₹" + (this.balance - amount));
         }
         
         this.balance -= amount;
@@ -181,7 +181,7 @@ public class Account {
     
     public void setAge(int age) throws IllegalArgumentException {
         if (age < MIN_AGE) {
-            throw new IllegalArgumentException("Age must be at least " + MIN_AGE);
+            throw new IllegalArgumentException("Customer must be at least " + MIN_AGE + " years old. Provided: " + age);
         }
         this.age = age;
     }
