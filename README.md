@@ -118,5 +118,8 @@ To compile and run the application tests, execute the following commands in your
 
 ```powershell
 # Compile all source files (including exceptions)
-javac AccountException.java InactiveAccountException.java InsufficientBalanceException.java InvalidAmountException.java InvalidPinException.java MinimumBalanceViolationException.java Account.java AccountEnhanced.java TestAccountEnhanced.java
+javac AccountException.java InactiveAccountException.java InsufficientBalanceException.java InvalidAmountException.java InvalidPinException.java MinimumBalanceViolationException.java Account.java TestAccountExceptions.java AccountEnhanced.java TestAccountEnhanced.java
+
+# Run the exceptions test runner (Activity 5)
+java TestAccountExceptions
 ```
