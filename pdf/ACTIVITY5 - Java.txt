@@ -1,0 +1,48 @@
+ACTIVITY 5: Introducing Exceptions in the Account Class
+
+Objective
+Enhance the Account class by replacing boolean returns with proper exception handling.
+
+Why Exceptions?
+• Professional: Real-world applications use exceptions
+• Informative: Exceptions carry detailed error messages
+• Enforceable: Cannot ignore exceptions like boolean returns
+• Cleaner: Separates error handling from business logic
+
+Requirements
+
+Key Changes from Boolean Version
+1. Remove all boolean returns
+2. Throw exceptions for all error conditions
+3. Custom exceptions for different error types
+4. Constructor throws exceptions instead of self-correcting
+
+Custom Exception Classes
+Create these custom exception classes in separate files:
+1. AccountException - Base exception for all account-related errors
+2. InsufficientBalanceException - When balance is insufficient
+3. InvalidAmountException - When amount is invalid (negative or zero)
+4. InactiveAccountException - When operation attempted on inactive account
+5. InvalidPinException - When PIN is incorrect or not set
+6. MinimumBalanceViolationException - When withdrawal would violate minimum balance
+
+Account Class Methods (With Exceptions)
+Method | Parameters | Return Type | Exceptions Thrown
+-------|------------|-------------|------------------
+deposit | amount (double) | void | InvalidAmountException, InactiveAccountException
+withdraw | amount (double), pin (int) | void | InvalidAmountException, InsufficientBalanceException, MinimumBalanceViolationException, InactiveAccountException, InvalidPinException
+closeAccount | None | void | IllegalStateException (if already closed)
+reopenAccount | None | void | IllegalStateException (if already active)
+setPin | pin (int) | void | IllegalArgumentException (if invalid PIN)
+
+Constructor
+public Account(int accountNumber, String name, int age, double initialBalance, String accountType)
+Throws IllegalArgumentException for:
+• Age < 18
+• Invalid account type
+• Balance below minimum
+
+Important Notes
+• No boolean returns - all methods return void
+• No self-correction - constructor throws exceptions
+• Specific exceptions - different types for different errors
