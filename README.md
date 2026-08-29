@@ -76,14 +76,36 @@ An advanced implementation (`AccountEnhanced`) implementing validation, business
 
 ---
 
+## 📅 Activity 4: Testing the Enhanced Account Class
+
+### 📄 File: [TestAccountEnhanced.java](file:///c:/Users/Admin/Downloads/activity/TestAccountEnhanced.java)
+
+### 🔍 Description
+A test runner (`TestAccountEnhanced`) designed to verify all validation, status management, and PIN protection rules implemented in `AccountEnhanced.java` using boolean return values.
+
+### 🛠️ Features & Requirements
+*   Tests valid account creation.
+*   Tests invalid age correction (under 18 auto-corrected to 18).
+*   Tests invalid account type default ("Invalid" defaulting to "Savings").
+*   Tests minimum balance enforcement on creation (auto-corrected to minimum).
+*   Tests minimum balance enforcement on withdrawal (returning `false` on violations).
+*   Tests status management (closing and reopening accounts).
+*   Tests PIN protection (setting, verifying, and checking operations with correct/incorrect/uninitialized PINs).
+*   Displays a comprehensive summary of all accounts at the end of the test.
+
+---
+
 ## 🚀 Compilation & Running
 
-To compile and run the basic test demonstration (Activity 2), execute the following commands in your terminal:
+To compile and run the application tests, execute the following commands in your terminal:
 
 ```powershell
 # Compile all source files
-javac Account.java TestAccount.java AccountEnhanced.java
+javac Account.java TestAccount.java AccountEnhanced.java TestAccountEnhanced.java
 
-# Run the test runner
+# Run the basic test runner (Activity 2)
 java TestAccount
+
+# Run the enhanced test runner (Activity 4)
+java TestAccountEnhanced
 ```
