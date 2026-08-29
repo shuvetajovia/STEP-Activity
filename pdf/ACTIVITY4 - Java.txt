@@ -1,0 +1,73 @@
+ACTIVITY 4: Testing the Enhanced Account Class
+
+Objective
+Write a test class that verifies all the new features using boolean return values.
+
+Requirements
+Create a test class TestAccountEnhanced.java that tests:
+
+1. Valid account creation
+2. Invalid age (under 18) - should auto-correct to 18
+3. Invalid account type - should default to "Savings"
+4. Minimum balance enforcement on creation - should auto-correct
+5. Minimum balance enforcement on withdrawal - should return false
+6. Account status management (close and reopen)
+7. PIN protection (set, verify, correct/incorrect PIN)
+
+Expected Output
+When you run your test class, the output should look like this:
+
+============================================================
+ENHANCED ACCOUNT TEST (BOOLEAN RETURNS)
+============================================================
+
+>>> Test 1: Valid Account Creation
+Account #1001 | John Doe (25 yrs) | Savings | ₹1000.0 | Active | PIN: No
+>>> Test 2: Invalid Age (under 18)
+Creating account with age 16
+Age auto-corrected to: 18
+Account #1002 | Young Kid (18 yrs) | Savings | ₹500.0 | Active | PIN: No
+>>> Test 3: Invalid Account Type
+Creating account with type "Invalid"
+Account type defaulted to: Savings
+Account #1003 | Test User (25 yrs) | Savings | ₹500.0 | Active | PIN: No
+>>> Test 4: Minimum Balance Enforcement on Creation
+Creating Savings account with ₹300 (below minimum)
+Balance auto-corrected to minimum: ₹500.0
+Account #1004 | Bob Wilson (25 yrs) | Savings | ₹500.0 | Active | PIN: No
+>>> Test 5: Withdrawal with Minimum Balance
+Initial: Account #1005 | Alice Brown (30 yrs) | Current | ₹1000.0 | Active | PIN: Yes
+Withdrawing ₹200.0: SUCCESS
+New balance: ₹800.0
+After withdrawal: Account #1005 | Alice Brown (30 yrs) | Current | ₹800.0 | Active | PIN: Yes
+Withdrawing ₹900.0 (would leave ₹-100): FAILED (Minimum balance violation)
+Current balance: ₹800.0
+>>> Test 6: Account Status Management
+Initial: Account #1006 | Charlie Green (35 yrs) | Savings | ₹2000.0 | Active | PIN: No
+Closing account: SUCCESS
+After close: Account #1006 | Charlie Green (35 yrs) | Savings | ₹2000.0 | Inactive | PIN: No
+
+Depositing ₹500.0 to closed account: FAILED (Account inactive)
+Reopening account: SUCCESS
+After reopen: Account #1006 | Charlie Green (35 yrs) | Savings | ₹2000.0 | Active | PIN: No
+>>> Test 7: PIN Protection
+Setting PIN 1234: SUCCESS
+Withdrawing ₹200.0 with correct PIN (1234): SUCCESS
+New balance: ₹1300.0
+Withdrawing ₹100.0 with incorrect PIN (9999): FAILED (Incorrect PIN)
+Withdrawing ₹100.0 with PIN not set: FAILED (PIN not set)
+>>> Test 8: All Accounts Summary
+Account #1001 | John Doe (25 yrs) | Savings | ₹1000.0 | Active | PIN: No
+Account #1002 | Young Kid (18 yrs) | Savings | ₹500.0 | Active | PIN: No
+Account #1003 | Test User (25 yrs) | Savings | ₹500.0 | Active | PIN: No
+Account #1004 | Bob Wilson (25 yrs) | Savings | ₹500.0 | Active | PIN: No
+Account #1005 | Alice Brown (30 yrs) | Current | ₹800.0 | Active | PIN: Yes
+Account #1006 | Charlie Green (35 yrs) | Savings | ₹2000.0 | Active | PIN: No
+Account #1007 | Diana Prince (28 yrs) | Savings | ₹1300.0 | Active | PIN: Yes
+============================================================
+ENHANCED TEST COMPLETED!
+============================================================
+
+Task
+Write the complete TestAccountEnhanced class in a file called TestAccountEnhanced.java.
+Handle all display formatting in this test class.
