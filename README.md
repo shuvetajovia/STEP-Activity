@@ -95,17 +95,28 @@ A test runner (`TestAccountEnhanced`) designed to verify all validation, status 
 
 ---
 
+## 📅 Activity 5: Introducing Exceptions in the Account Class
+
+### 📄 File: [Account.java](file:///c:/Users/Admin/Downloads/activity/Account.java)
+
+### 🔍 Description
+In this activity, the `Account` class is updated to use robust Exception Handling rather than simple boolean return values for operations. Custom checked exceptions are introduced, and the constructor now throws `IllegalArgumentException` on invalid values instead of self-correcting them.
+
+### 🛠️ Custom Exceptions Created
+*   [`AccountException.java`](file:///c:/Users/Admin/Downloads/activity/AccountException.java) (Base class)
+*   [`InvalidAmountException.java`](file:///c:/Users/Admin/Downloads/activity/InvalidAmountException.java) (For negative/zero deposit/withdrawal amounts)
+*   [`InsufficientBalanceException.java`](file:///c:/Users/Admin/Downloads/activity/InsufficientBalanceException.java) (For withdrawals exceeding balance)
+*   [`MinimumBalanceViolationException.java`](file:///c:/Users/Admin/Downloads/activity/MinimumBalanceViolationException.java) (For withdrawals that would drop balance below minimum limit)
+*   [`InactiveAccountException.java`](file:///c:/Users/Admin/Downloads/activity/InactiveAccountException.java) (For operations attempted on inactive accounts)
+*   [`InvalidPinException.java`](file:///c:/Users/Admin/Downloads/activity/InvalidPinException.java) (For incorrect or missing PIN verification)
+
+---
+
 ## 🚀 Compilation & Running
 
 To compile and run the application tests, execute the following commands in your terminal:
 
 ```powershell
-# Compile all source files
-javac Account.java TestAccount.java AccountEnhanced.java TestAccountEnhanced.java
-
-# Run the basic test runner (Activity 2)
-java TestAccount
-
-# Run the enhanced test runner (Activity 4)
-java TestAccountEnhanced
+# Compile all source files (including exceptions)
+javac AccountException.java InactiveAccountException.java InsufficientBalanceException.java InvalidAmountException.java InvalidPinException.java MinimumBalanceViolationException.java Account.java AccountEnhanced.java TestAccountEnhanced.java
 ```
