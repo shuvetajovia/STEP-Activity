@@ -1,3 +1,6 @@
+import java.util.Objects;
+import java.util.Set;
+
 public class AccountEnhanced {
     private int accountNumber;
     private String name;
@@ -7,38 +10,23 @@ public class AccountEnhanced {
     private String status;
     private Integer pin;
 
+    private static final Set<String> VALID_ACCOUNT_TYPES = Set.of("Savings", "Current");
+
     public AccountEnhanced(int accountNumber, String name, int age, double initialBalance, String accountType) {
         this.accountNumber = accountNumber;
         this.name = name;
+        this.age = Math.max(age, 18);
+        this.accountType = VALID_ACCOUNT_TYPES.contains(accountType) ? accountType : "Savings";
         
-        if (age < 18) {
-            this.age = 18;
-        } else {
-            this.age = age;
-        }
-        
-        if (accountType == null || (!accountType.equals("Savings") && !accountType.equals("Current"))) {
-            this.accountType = "Savings";
-        } else {
-            this.accountType = accountType;
-        }
-        
-        double minBalance = this.accountType.equals("Savings") ? 500.0 : 1000.0;
-        if (initialBalance < minBalance) {
-            this.balance = minBalance;
-        } else {
-            this.balance = initialBalance;
-        }
+        double minBalance = "Savings".equals(this.accountType) ? 500.0 : 1000.0;
+        this.balance = Math.max(initialBalance, minBalance);
         
         this.status = "Active";
         this.pin = null;
     }
 
     public boolean deposit(double amount) {
-        if (!"Active".equals(status)) {
-            return false;
-        }
-        if (amount <= 0) {
+        if (!"Active".equals(status) || amount <= 0) {
             return false;
         }
         this.balance += amount;
@@ -46,17 +34,11 @@ public class AccountEnhanced {
     }
 
     public boolean withdraw(double amount, int pin) {
-        if (!"Active".equals(status)) {
-            return false;
-        }
-        if (!verifyPin(pin)) {
-            return false;
-        }
-        if (amount <= 0) {
+        if (!"Active".equals(status) || !verifyPin(pin) || amount <= 0) {
             return false;
         }
         
-        double minBalance = this.accountType.equals("Savings") ? 500.0 : 1000.0;
+        double minBalance = "Savings".equals(this.accountType) ? 500.0 : 1000.0;
         if (this.balance - amount < minBalance) {
             return false;
         }
@@ -94,7 +76,7 @@ public class AccountEnhanced {
     }
 
     public void setAge(int age) {
-        this.age = age;
+        this.age = Math.max(age, 18); // Use Math.max here too for consistency
     }
 
     public boolean closeAccount() {
@@ -114,7 +96,7 @@ public class AccountEnhanced {
     }
 
     public boolean setPin(int pin) {
-        if (pin >= 0 && pin <= 9999) {
+        if (pin >= 1000 && pin <= 9999) { // Ensure it is exactly a 4-digit positive integer
             this.pin = pin;
             return true;
         }
@@ -122,13 +104,10 @@ public class AccountEnhanced {
     }
 
     public boolean verifyPin(int pin) {
-        if (this.pin == null) {
-            return false;
-        }
-        return this.pin == pin;
+        return Objects.equals(this.pin, pin); // Elegant null-safe comparison
     }
 
     public boolean hasPin() {
-        return this.pin != null;
+        return Objects.nonNull(this.pin); // Elegant built-in null check
     }
 }
