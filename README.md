@@ -134,8 +134,68 @@ To compile and run the application tests, execute the following commands in your
 
 ```powershell
 # Compile all source files (including exceptions and tests)
-javac AccountException.java InactiveAccountException.java InsufficientBalanceException.java InvalidAmountException.java InvalidPinException.java MinimumBalanceViolationException.java Account.java TestAccountExceptions.java AccountEnhanced.java TestAccountEnhanced.java
+javac AccountException.java InactiveAccountException.java InsufficientBalanceException.java InvalidAmountException.java InvalidPinException.java MinimumBalanceViolationException.java Account.java SavingsAccount.java CurrentAccount.java TestAccountExceptions.java AccountEnhanced.java TestAccountEnhanced.java
 
 # Run the exceptions test runner (Activity 6)
 java TestAccountExceptions
+
+# Run the subclasses test runner (Activity 8) — self-contained single file
+javac TestAccountSubclasses.java
+java TestAccountSubclasses
 ```
+
+---
+
+## 📅 Activity 7: Creating Account Subclasses (Savings & Current)
+
+### 📄 Files
+- [`Account.java`](file:///c:/Users/Admin/Downloads/activity/Account.java) — converted to **abstract class**
+- [`SavingsAccount.java`](file:///c:/Users/Admin/Downloads/activity/SavingsAccount.java) — **[NEW]**
+- [`CurrentAccount.java`](file:///c:/Users/Admin/Downloads/activity/CurrentAccount.java) — **[NEW]**
+
+### 🏗️ Architecture
+```
+Account (Abstract Parent)
+├── SavingsAccount (Child)
+└── CurrentAccount (Child)
+```
+
+### 🔍 Description
+Introduces inheritance by converting `Account` to an abstract class and creating two specialized subclasses.
+
+### 🛠️ Features & Requirements
+1. **Abstract `Account` class**:
+   - Removed `accountType` field and `accountType` constructor param — each subclass defines its own type
+   - Two new abstract methods: `getMinimumBalance()` and `getAccountType()`
+   - Protected `setBalance()` helper for subclass use
+   - Constructor validates age and minimum balance (delegated to the subclass via abstract methods)
+2. **`SavingsAccount`**:
+   - Minimum balance: ₹500
+   - Interest rate: 4% per annum
+   - Extra methods: `calculateInterest(int years)`, `getInterestRate()`
+3. **`CurrentAccount`**:
+   - Minimum balance: ₹1000
+   - Overdraft limit: ₹5000
+   - Overrides `withdraw()` to allow balance to go below minimum using the overdraft facility
+   - Extra methods: `getOverdraftLimit()`, `getOverdraftUsed()`, `getAvailableOverdraft()`, `isUsingOverdraft()`, `repayOverdraft(double)`
+
+---
+
+## 📅 Activity 8: Testing Account Subclasses
+
+### 📄 File: [`TestAccountSubclasses.java`](file:///c:/Users/Admin/Downloads/activity/TestAccountSubclasses.java)
+
+### 🔍 Description
+A comprehensive self-contained test class (`TestAccountSubclasses`) that verifies the specialized behaviour of `SavingsAccount` and `CurrentAccount`. Follows the same single-file OnlineGDB-compatible pattern as `TestAccountExceptions.java`.
+
+### 🛠️ Test Coverage
+1. **Test 1** — Create `SavingsAccount` and `CurrentAccount` instances
+2. **Test 2** — Verify polymorphic `getAccountType()` and `getMinimumBalance()` calls
+3. **Test 3** — Savings-specific interest calculation (1, 2, 5 years)
+4. **Test 4** — Current-specific overdraft: below-minimum withdrawal, exceeding overdraft, repayment
+5. **Test 5** — Polymorphism: treating both account types uniformly through `Account` references
+6. **Test 6** — Validation: invalid creation (below min balance, underage)
+7. **Test 7** — Savings account PIN and operation exceptions (MinimumBalanceViolation)
+8. **Test 8** — Current account status management (close, deposit on closed, reopen, deposit)
+9. **Test 9** — All accounts summary
+
