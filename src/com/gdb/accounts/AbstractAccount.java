@@ -6,15 +6,15 @@ import com.gdb.exceptions.InvalidAmountException;
 import com.gdb.exceptions.InvalidPinException;
 
 /**
- * AbstractAccount — the common base for all bank account types.
+ * AbstractAccount â€” the common base for all bank account types.
  *
  * Implements the Template Method Pattern for the withdrawal process:
- *   withdraw() defines the fixed sequence (validate PIN → check status → validate amount → debit)
+ *   withdraw() defines the fixed sequence (validate PIN â†’ check status â†’ validate amount â†’ debit)
  *   processDebit() is abstract, letting each subclass enforce its own debit rule.
  *
  * Activity 9: Abstract Classes & Template Method Pattern
  */
-public abstract class AbstractAccount {
+public abstract class AbstractAccount implements IAccount {
 
     // ===== Constants =====
     private static final int MIN_AGE    = 18;
@@ -90,10 +90,10 @@ public abstract class AbstractAccount {
         this.pin           = pin;
     }
 
-    // ===== Template Method – Withdrawal =====
+    // ===== Template Method â€“ Withdrawal =====
 
     /**
-     * Withdrawal Template Method — enforces the same sequence for every account type:
+     * Withdrawal Template Method â€” enforces the same sequence for every account type:
      *   Step 1: Validate PIN
      *   Step 2: Check account status
      *   Step 3: Validate amount (> 0)
@@ -108,26 +108,26 @@ public abstract class AbstractAccount {
      */
     public final void withdraw(double amount, String enteredPin) throws AccountException {
 
-        // Step 1 – Validate PIN
+        // Step 1 â€“ Validate PIN
         if (!validatePin(enteredPin)) {
             throw new InvalidPinException("Incorrect PIN. Withdrawal denied.");
         }
 
-        // Step 2 – Check account status
+        // Step 2 â€“ Check account status
         if (!"ACTIVE".equals(this.status)) {
             throw new InactiveAccountException(
                 "Account " + accountNumber + " is inactive. Cannot withdraw."
             );
         }
 
-        // Step 3 – Validate amount
+        // Step 3 â€“ Validate amount
         if (amount <= 0) {
             throw new InvalidAmountException(
                 "Withdrawal amount must be greater than 0. Provided: " + amount
             );
         }
 
-        // Step 4 – Account-specific debit rule
+        // Step 4 â€“ Account-specific debit rule
         processDebit(amount);
     }
 

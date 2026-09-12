@@ -281,3 +281,46 @@ java -cp bin com.gdb.tests.TestAbstractAccount
 ```
 
 
+
+
+---
+
+## 📅 Activity 11: Interface & Factory Pattern
+
+### 📄 Files: `src/com/gdb/accounts/`
+- [`IAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/IAccount.java) — Interface declaring the contract for all bank accounts
+- [`AccountFactory.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/AccountFactory.java) — Factory class centralizing account instantiation via `createAccount`
+- [`AbstractAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/AbstractAccount.java) — Implements `IAccount`
+
+### 🔍 Description
+Decouples banking operations using the `IAccount` interface and implements the Factory Design Pattern in `AccountFactory` for centralized object creation.
+
+---
+
+## 📅 Activity 12: Factory-Driven Banking System
+
+### 📄 File: [`TestInterfaceFactory.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/tests/TestInterfaceFactory.java)
+
+### 🔍 Description
+A factory-driven test suite where accounts are instantiated solely through `AccountFactory` and manipulated exclusively through `IAccount` interface references.
+
+### 🛠️ Test Coverage
+1. **[Test 1]** Savings Account Creation & Deposit via interface reference
+2. **[Test 2]** Current Account Overdraft Withdrawal via interface reference
+3. **[Test 3]** Fixed Deposit Premature Withdrawal rejection
+4. **[Test 4]** Invalid account type rejection from factory (`IllegalArgumentException`)
+
+---
+
+## 🚀 Complete Compilation & Running Guide
+
+```powershell
+# Compile all source files into bin directory
+javac -d bin src/com/gdb/exceptions/*.java src/com/gdb/accounts/*.java src/com/gdb/tests/*.java
+
+# Run Activities 11 & 12 (Factory Pattern & Interface Tests)
+java -cp bin com.gdb.tests.TestInterfaceFactory
+
+# Run Activities 9 & 10 (Abstract Accounts & Banking Operations Suite)
+java -cp bin com.gdb.tests.TestAbstractAccount
+```
