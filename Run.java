@@ -14,24 +14,29 @@ public class Run {
         System.out.println("   BANKING ACCOUNT SYSTEM - ALL ACTIVITIES (1-12)");
         System.out.println("=================================================");
 
+        // Detect base directory where activity folders live
+        File baseDir = new File(".");
+        if (!new File(baseDir, "activity1").exists() && new File(baseDir, "java-gdb-activities-10/activity1").exists()) {
+            baseDir = new File(baseDir, "java-gdb-activities-10");
+        }
+
         int total = 0;
         int passed = 0;
 
         for (int i = 1; i <= 12; i++) {
-            String actDir = "activity" + i;
-            File dir = new File(actDir);
-            if (!dir.exists() || !dir.isDirectory()) {
+            File actDir = new File(baseDir, "activity" + i);
+            if (!actDir.exists() || !actDir.isDirectory()) {
                 continue;
             }
 
             String mainClass = getMainClass(i);
             if (mainClass == null) {
-                continue; // Skip activity 5 (contains exception classes only)
+                continue; // Skip activity 5 (exceptions only)
             }
 
             total++;
             System.out.println("\n-------------------------------------------------");
-            System.out.println(" Running " + actDir.toUpperCase() + " [" + mainClass + "]");
+            System.out.println(" Running ACTIVITY " + i + " [" + mainClass + "]");
             System.out.println("-------------------------------------------------");
 
             File binDir = new File(actDir, "bin");
@@ -39,41 +44,48 @@ public class Run {
                 binDir.mkdirs();
             }
 
-            // Find all .java files in the activity's src directory
+            File srcDir = new File(actDir, "src");
+            if (!srcDir.exists()) {
+                System.out.println("No src folder found in " + actDir.getPath());
+                continue;
+            }
+
             List<String> javaFiles;
             try {
-                javaFiles = Files.walk(Paths.get(actDir, "src"))
+                javaFiles = Files.walk(srcDir.toPath())
                         .filter(p -> p.toString().endsWith(".java"))
                         .map(Path::toString)
                         .collect(Collectors.toList());
             } catch (IOException e) {
-                System.err.println("Error reading source files for " + actDir + ": " + e.getMessage());
+                System.err.println("Error reading files for " + actDir + ": " + e.getMessage());
                 continue;
             }
 
             if (javaFiles.isEmpty()) {
-                System.out.println("No source files found in " + actDir + "/src");
+                System.out.println("No source files found in " + srcDir.getPath());
                 continue;
             }
 
-            // Step 1: Compile all source files into bin
+            // Compile
             List<String> compileCmd = new ArrayList<>();
             compileCmd.add("javac");
             compileCmd.add("-d");
-            compileCmd.add(binDir.getPath());
-            compileCmd.addAll(javaFiles);
+            compileCmd.add(binDir.getAbsolutePath());
+            for (String f : javaFiles) {
+                compileCmd.add(f);
+            }
 
             boolean compileSuccess = runProcess(compileCmd);
             if (!compileSuccess) {
-                System.err.println("[FAIL] Compilation failed for " + actDir);
+                System.err.println("[FAIL] Compilation failed for activity " + i);
                 continue;
             }
 
-            // Step 2: Run the test runner class
+            // Run
             List<String> runCmd = new ArrayList<>();
             runCmd.add("java");
             runCmd.add("-cp");
-            runCmd.add(binDir.getPath());
+            runCmd.add(binDir.getAbsolutePath());
             runCmd.add(mainClass);
 
             boolean runSuccess = runProcess(runCmd);
