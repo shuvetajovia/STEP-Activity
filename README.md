@@ -199,3 +199,85 @@ A comprehensive self-contained test class (`TestAccountSubclasses`) that verifie
 8. **Test 8** — Current account status management (close, deposit on closed, reopen, deposit)
 9. **Test 9** — All accounts summary
 
+---
+
+## 📅 Activity 9: Abstract Classes & Template Method Pattern
+
+### 📄 Files: `src/com/gdb/accounts/` & `src/com/gdb/exceptions/`
+- [`AbstractAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/AbstractAccount.java) — Abstract base class implementing the Template Method Pattern
+- [`SavingsAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/SavingsAccount.java) — Subclass with minimum balance enforcement (Rs 1000) & interest calculation (4%)
+- [`CurrentAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/CurrentAccount.java) — Subclass with overdraft facility (Rs 5000 limit)
+- [`SalaryAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/SalaryAccount.java) — Subclass with no overdraft and inactive months tracker
+- [`FixedDepositAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/accounts/FixedDepositAccount.java) — Subclass disallowing premature withdrawals
+
+### 🏗️ Architecture & Template Method Pattern
+```
+             AbstractAccount (Template: withdraw())
+                     |
+  -------------------------------------------------------------
+  |                   |                    |                  |
+SavingsAccount   CurrentAccount       SalaryAccount    FixedDepositAccount
+(processDebit:   (processDebit:       (processDebit:   (processDebit:
+ min-balance)     balance+overdraft)   balance limit)   blocks withdrawal)
+```
+
+### 🔍 Description
+Enforces the **Template Method Pattern** for the withdrawal process:
+1. `withdraw(double amount, String pin)` in `AbstractAccount` defines the fixed 4-step workflow:
+   - **Step 1**: Validate PIN (`InvalidPinException`)
+   - **Step 2**: Check account status (`InactiveAccountException`)
+   - **Step 3**: Validate amount > 0 (`InvalidAmountException`)
+   - **Step 4**: Delegate to abstract `processDebit(double amount)`
+2. Each subclass overrides `processDebit(double amount)` to implement its unique business rule:
+   - **Savings**: Rejects debit if remaining balance falls below ₹1000 (`MinimumBalanceViolationException`).
+   - **Current**: Allows overdraft up to ₹5000 (`InsufficientBalanceException` if exceeded).
+   - **Salary**: Allows debit only up to available balance (`InsufficientBalanceException` if exceeded).
+   - **Fixed Deposit**: Premature withdrawal disallowed (`AccountException` always thrown).
+
+---
+
+## 📅 Activity 10: Banking Operations with Abstract Accounts
+
+### 📄 File: [`TestAbstractAccount.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/tests/TestAbstractAccount.java)
+
+### 🔍 Description
+A full test and driver program implementing a **Banking Operations Engine** using polymorphism, arrays of parent-class objects, secure fund transfer transactions, and monthly banking cycles.
+
+### 🛠️ Key Features Implemented
+1. **Account Portfolio (`AbstractAccount[]`)**:
+   - Polymorphic storage holding `SavingsAccount`, `CurrentAccount`, `SalaryAccount`, and `FixedDepositAccount`.
+2. **Fund Transfer Engine (`transfer()`)**:
+   - Secure withdrawal-before-deposit transactional ordering (`withdraw()` then `deposit()`).
+   - If the source withdrawal fails for any reason (e.g. invalid PIN, insufficient balance), the transfer aborts immediately without crediting the destination.
+3. **Monthly Banking Maintenance Cycle**:
+   - Loops through the `AbstractAccount[]` array and applies runtime type checking via `instanceof`:
+   - `SavingsAccount`: Applies monthly interest via `applyInterest()`.
+   - `SalaryAccount`: Processes salary inactivity via `incrementInactiveMonths()`.
+4. **Comprehensive Test Suite**:
+   - Tests valid transfers, failed transfers (wrong PIN), overdraft limit checks, and monthly batch cycles.
+
+---
+
+## 🚀 Compilation & Running Guide
+
+### Activities 1–6 & 8 (Single-File / Root Directory):
+```powershell
+# Activity 6: Test Account with Exceptions
+javac TestAccountExceptions.java
+java TestAccountExceptions
+
+# Activity 8: Test Account Subclasses
+javac TestAccountSubclasses.java
+java TestAccountSubclasses
+```
+
+### Activities 9 & 10 (Package-Structured Project):
+```powershell
+# Compile all source files into bin directory
+javac -d bin src/com/gdb/exceptions/*.java src/com/gdb/accounts/*.java src/com/gdb/tests/*.java
+
+# Run the Banking Operations Engine & Template Method Test Suite (Activities 9 & 10)
+java -cp bin com.gdb.tests.TestAbstractAccount
+```
+
+
