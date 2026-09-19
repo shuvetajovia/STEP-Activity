@@ -11,7 +11,7 @@ public class Run {
 
     public static void main(String[] args) {
         System.out.println("=================================================");
-        System.out.println("   BANKING ACCOUNT SYSTEM - ALL ACTIVITIES (1-13)");
+        System.out.println("   BANKING ACCOUNT SYSTEM - ALL ACTIVITIES (1-14)");
         System.out.println("=================================================");
 
         // Detect base directory where activity folders live
@@ -23,7 +23,7 @@ public class Run {
         int total = 0;
         int passed = 0;
 
-        for (int i = 1; i <= 13; i++) {
+        for (int i = 1; i <= 14; i++) {
             File actDir = new File(baseDir, "activity" + i);
             if (!actDir.exists() || !actDir.isDirectory()) {
                 continue;
@@ -75,7 +75,7 @@ public class Run {
                 compileCmd.add(f);
             }
 
-            boolean compileSuccess = runProcess(compileCmd);
+            boolean compileSuccess = runProcess(compileCmd, actDir);
             if (!compileSuccess) {
                 System.err.println("[FAIL] Compilation failed for activity " + i);
                 continue;
@@ -88,7 +88,7 @@ public class Run {
             runCmd.add(binDir.getAbsolutePath());
             runCmd.add(mainClass);
 
-            boolean runSuccess = runProcess(runCmd);
+            boolean runSuccess = runProcess(runCmd, actDir);
             if (runSuccess) {
                 passed++;
             }
@@ -119,14 +119,19 @@ public class Run {
                 return "com.gdb.tests.TestInterfaceFactory";
             case 13:
                 return "com.gdb.tests.TestAccountRulesEngine";
+            case 14:
+                return "com.gdb.tests.TestAccountRulesEngineProperties";
             default:
                 return null;
         }
     }
 
-    private static boolean runProcess(List<String> command) {
+    private static boolean runProcess(List<String> command, File workingDir) {
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
+            if (workingDir != null && workingDir.exists()) {
+                pb.directory(workingDir);
+            }
             pb.inheritIO();
             Process process = pb.start();
             int exitCode = process.waitFor();

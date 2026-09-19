@@ -1,10 +1,6 @@
-package com.gdb.accounts;
+package com.gdb.domain;
 
 public class AccountFactory {
-    public static IAccount createAccount(String type, String accNum, String name, int age, double balance, String pin) {
-        return createAccount(type, accNum, name, age, balance, "ACTIVE", pin, 0);
-    }
-
     public static IAccount createAccount(String type, String accNum, String name, int age, double balance, String status, String pin) {
         return createAccount(type, accNum, name, age, balance, status, pin, 0);
     }
@@ -15,12 +11,12 @@ public class AccountFactory {
             case "SAVINGS":
                 return new SavingsAccount(accNum, name, age, balance, status, pin, tenureYears);
             case "CURRENT":
-                return new CurrentAccount(accNum, name, age, balance, pin);
+                return new CurrentAccount(accNum, name, age, balance, status, pin, 25000.0);
             case "FIXED_DEPOSIT":
             case "FD":
-                return new FixedDepositAccount(accNum, name, age, balance, pin, 12, 6.5);
+                return new FixedDepositAccount(accNum, name, age, balance, status, pin, 12, 6.5);
             case "SALARY":
-                return new SalaryAccount(accNum, name, age, balance, pin, "TechCorp");
+                return new SalaryAccount(accNum, name, age, balance, status, pin, "TechCorp");
             default:
                 throw new IllegalArgumentException("Unknown account type: " + type);
         }

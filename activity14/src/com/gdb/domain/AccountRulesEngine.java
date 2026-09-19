@@ -1,9 +1,10 @@
-package com.gdb.accounts;
+package com.gdb.domain;
 
 public class AccountRulesEngine {
     private static AccountRulesPropertiesLoader savingsLoader =
         new AccountRulesPropertiesLoader("src/main/resources/config/rules/savings.properties");
 
+    // Bucket names are lowercase so they match the keys in savings.properties (e.g. min.balance.new).
     public static String getSavingsBucket(int tenureYears) {
         if (tenureYears >= 5) return "privilege";
         if (tenureYears >= 3) return "premium";

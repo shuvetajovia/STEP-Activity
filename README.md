@@ -312,15 +312,45 @@ A factory-driven test suite where accounts are instantiated solely through `Acco
 
 ---
 
+---
+
+## 📅 Activity 13: Rules Engine & Dynamic Account Policy Integration
+
+### 📄 Files: `src/com/gdb/domain/` & `src/com/gdb/tests/`
+- [`AccountRulesEngine.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/domain/AccountRulesEngine.java) — Centralized rules engine managing business policies
+- [`TestAccountRulesEngine.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/tests/TestAccountRulesEngine.java) — Verification suite for dynamic rule assignment
+
+### 🔍 Description
+Centralizes banking rules using in-memory tables and dynamically configures minimum balances and interest rates based on tenure buckets (New, Standard, Premium, Privilege).
+
+---
+
+## 📅 Activity 14: External Properties Rules Engine
+
+### 📄 Files: `src/main/resources/config/rules/` & `src/com/gdb/domain/`
+- [`savings.properties`](file:///c:/Users/Admin/Downloads/activity/src/main/resources/config/rules/savings.properties) — Externalized savings account tenure rules
+- [`current.properties`](file:///c:/Users/Admin/Downloads/activity/src/main/resources/config/rules/current.properties) — Externalized overdraft limit configuration
+- [`fixeddeposit.properties`](file:///c:/Users/Admin/Downloads/activity/src/main/resources/config/rules/fixeddeposit.properties) — Externalized FD tenure interest rates
+- [`salary.properties`](file:///c:/Users/Admin/Downloads/activity/src/main/resources/config/rules/salary.properties) — Externalized salary account thresholds
+- [`AccountRulesPropertiesLoader.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/domain/AccountRulesPropertiesLoader.java) — Classpath & filesystem properties loader utility
+- [`AccountRulesEngine.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/domain/AccountRulesEngine.java) — External properties-driven rules engine
+- [`TestAccountRulesEngineProperties.java`](file:///c:/Users/Admin/Downloads/activity/src/com/gdb/tests/TestAccountRulesEngineProperties.java) — Verification suite for external properties
+
+### 🔍 Description
+Externalizes all hardcoded business rules into `.properties` files. Decouples the business logic using `AccountRulesPropertiesLoader` with type-safe fallback accessors to achieve runtime configuration management.
+
+---
+
 ## 🚀 Complete Compilation & Running Guide
 
 ```powershell
 # Compile all source files into bin directory
-javac -d bin src/com/gdb/exceptions/*.java src/com/gdb/accounts/*.java src/com/gdb/tests/*.java
+javac -d bin (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName })
 
-# Run Activities 11 & 12 (Factory Pattern & Interface Tests)
-java -cp bin com.gdb.tests.TestInterfaceFactory
+# Run Activity 14 (External Properties Rules Engine)
+java -cp bin com.gdb.tests.TestAccountRulesEngineProperties
 
-# Run Activities 9 & 10 (Abstract Accounts & Banking Operations Suite)
-java -cp bin com.gdb.tests.TestAbstractAccount
+# Run All Activities (1 to 14) via Master Runner
+javac Run.java
+java Run
 ```
