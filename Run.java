@@ -11,7 +11,7 @@ public class Run {
 
     public static void main(String[] args) {
         System.out.println("=================================================");
-        System.out.println("   BANKING ACCOUNT SYSTEM - ALL ACTIVITIES (1-14)");
+        System.out.println("   BANKING ACCOUNT SYSTEM - ALL ACTIVITIES (1-15)");
         System.out.println("=================================================");
 
         // Detect base directory where activity folders live
@@ -23,7 +23,7 @@ public class Run {
         int total = 0;
         int passed = 0;
 
-        for (int i = 1; i <= 14; i++) {
+        for (int i = 1; i <= 15; i++) {
             File actDir = new File(baseDir, "activity" + i);
             if (!actDir.exists() || !actDir.isDirectory()) {
                 continue;
@@ -121,6 +121,8 @@ public class Run {
                 return "com.gdb.tests.TestAccountRulesEngine";
             case 14:
                 return "com.gdb.tests.TestAccountRulesEngineProperties";
+            case 15:
+                return "com.gdb.tests.TestTransferService";
             default:
                 return null;
         }
