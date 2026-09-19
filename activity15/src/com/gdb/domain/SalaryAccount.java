@@ -1,32 +1,33 @@
 package com.gdb.domain;
 
-import com.gdb.exceptions.*;
+import com.gdb.exceptions.InvalidAgeException;
 
-public class SalaryAccount extends AbstractAccount {
-    private String employer;
-    private int inactiveMonths;
+public class SalaryAccount extends Account {
+    public SalaryAccount(int accountNumber, String name, int age, double initialBalance, int tenureYears) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, tenureYears);
+    }
 
-    public SalaryAccount(String accountNumber, String name, int age, double balance, String status, String pin, String employer) {
-        super(accountNumber, name, age, balance, "SALARY", status, pin, AccountRulesEngine.getSalaryDailyLimit());
-        this.employer = employer;
-        this.inactiveMonths = 0;
+    public SalaryAccount(int accountNumber, String name, int age, double initialBalance) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, 0);
     }
 
     @Override
-    public void processDebit(double amount) throws AccountException {
-        if ((this.balance - amount) < 0) {
-            throw new InsufficientBalanceException("Insufficient funds in salary account: available Rs " + balance);
-        }
-        this.balance -= amount;
+    public String getAccountType() {
+        return "Salary";
     }
 
-    public void incrementInactiveMonths() {
-        this.inactiveMonths++;
-        if (this.inactiveMonths >= 3) {
-            this.status = "INACTIVE";
-        }
+    @Override
+    public double getMinimumBalance() {
+        return AccountRulesEngine.getInstance().getMinimumBalance("SALARY", tenureYears);
     }
 
-    public String getEmployer() { return employer; }
-    public int getInactiveMonths() { return inactiveMonths; }
+    @Override
+    public double getInterestRate() {
+        return AccountRulesEngine.getInstance().getInterestRate("SALARY", tenureYears);
+    }
+
+    @Override
+    public boolean canWithdraw(double amount) {
+        return (this.balance - amount) >= getMinimumBalance();
+    }
 }

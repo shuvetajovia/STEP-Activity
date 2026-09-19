@@ -1,40 +1,33 @@
 package com.gdb.domain;
 
-import com.gdb.exceptions.*;
+import com.gdb.exceptions.InvalidAgeException;
 
-public class SavingsAccount extends AbstractAccount {
-    private int tenureYears;
-    private double minBalance;
-    private double interestRate;
-
-    public SavingsAccount(String accountNumber, String name, int age, double balance, String status, String pin, int tenureYears) {
-        super(accountNumber, name, age, balance, "SAVINGS", status, pin, AccountRulesEngine.getSavingsDailyLimit(tenureYears));
-        this.tenureYears = tenureYears;
-        this.minBalance = AccountRulesEngine.getSavingsMinBalance(tenureYears);
-        this.interestRate = AccountRulesEngine.getSavingsInterestRate(tenureYears);
+public class SavingsAccount extends Account {
+    public SavingsAccount(int accountNumber, String name, int age, double initialBalance, int tenureYears) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, tenureYears);
     }
 
-    public SavingsAccount(String accountNumber, String name, int age, double balance, String status, String pin, double minBalance, double interestRate) {
-        super(accountNumber, name, age, balance, "SAVINGS", status, pin, 25000.0);
-        this.tenureYears = 0;
-        this.minBalance = minBalance;
-        this.interestRate = interestRate;
+    public SavingsAccount(int accountNumber, String name, int age, double initialBalance) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, 0);
     }
 
     @Override
-    public void processDebit(double amount) throws AccountException {
-        if ((this.balance - amount) < this.minBalance) {
-            throw new MinimumBalanceViolationException("Cannot breach minimum balance of Rs " + minBalance);
-        }
-        this.balance -= amount;
+    public String getAccountType() {
+        return "Savings";
     }
 
-    public void applyInterest() {
-        double interest = this.balance * (interestRate / 100.0);
-        this.balance += interest;
+    @Override
+    public double getMinimumBalance() {
+        return AccountRulesEngine.getInstance().getMinimumBalance("SAVINGS", tenureYears);
     }
 
-    public int getTenureYears() { return tenureYears; }
-    public double getMinBalance() { return minBalance; }
-    public double getInterestRate() { return interestRate; }
+    @Override
+    public double getInterestRate() {
+        return AccountRulesEngine.getInstance().getInterestRate("SAVINGS", tenureYears);
+    }
+
+    @Override
+    public boolean canWithdraw(double amount) {
+        return (this.balance - amount) >= getMinimumBalance();
+    }
 }

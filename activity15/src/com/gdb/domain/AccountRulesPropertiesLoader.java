@@ -12,23 +12,55 @@ public class AccountRulesPropertiesLoader {
         loadProperties(configPath);
     }
 
+    public static Properties loadRules(String accountType) {
+        String fileName = accountType.toLowerCase() + ".properties";
+        AccountRulesPropertiesLoader loader = new AccountRulesPropertiesLoader(fileName);
+        return loader.properties;
+    }
+
     private void loadProperties(String configPath) {
         InputStream is = null;
         try {
+            String cleanName = new File(configPath).getName();
+            
+            // 1. Classpath
             is = getClass().getClassLoader().getResourceAsStream(configPath);
             if (is == null) {
-                File file = new File(configPath);
-                if (file.exists()) {
-                    is = new FileInputStream(file);
+                is = getClass().getClassLoader().getResourceAsStream("config/rules/" + cleanName);
+            }
+            if (is == null) {
+                is = getClass().getClassLoader().getResourceAsStream("main/resources/config/rules/" + cleanName);
+            }
+
+            // 2. Filesystem
+            if (is == null) {
+                String[] candidates = {
+                    configPath,
+                    cleanName,
+                    "config/rules/" + cleanName,
+                    "src/main/resources/config/rules/" + cleanName,
+                    "../config/rules/" + cleanName,
+                    "../../config/rules/" + cleanName,
+                    "15/activity15 Java/config/rules/" + cleanName,
+                    "15/activity15 Java/src/main/resources/config/rules/" + cleanName,
+                    "15/activity15 Python/config/rules/" + cleanName,
+                    "activity15/config/rules/" + cleanName,
+                    "activity15/src/main/resources/config/rules/" + cleanName
+                };
+                for (String path : candidates) {
+                    File file = new File(path);
+                    if (file.exists() && file.isFile()) {
+                        is = new FileInputStream(file);
+                        break;
+                    }
                 }
             }
+
             if (is != null) {
                 properties.load(is);
-            } else {
-                System.err.println("Warning: Config file not found at " + configPath);
             }
         } catch (Exception e) {
-            System.err.println("Warning: Failed to load properties from " + configPath + ": " + e.getMessage());
+            System.err.println("Warning: Failed to load properties for " + configPath + ": " + e.getMessage());
         } finally {
             if (is != null) {
                 try {
@@ -65,5 +97,9 @@ public class AccountRulesPropertiesLoader {
         } catch (NumberFormatException e) {
             return defaultValue;
         }
+    }
+
+    public Properties getProperties() {
+        return properties;
     }
 }

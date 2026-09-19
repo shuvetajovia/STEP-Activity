@@ -1,22 +1,33 @@
 package com.gdb.domain;
 
-import com.gdb.exceptions.*;
+import com.gdb.exceptions.InvalidAgeException;
 
-public class CurrentAccount extends AbstractAccount {
-    private double overdraftLimit;
+public class CurrentAccount extends Account {
+    public CurrentAccount(int accountNumber, String name, int age, double initialBalance, int tenureYears) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, tenureYears);
+    }
 
-    public CurrentAccount(String accountNumber, String name, int age, double balance, String status, String pin, double overdraftLimit) {
-        super(accountNumber, name, age, balance, "CURRENT", status, pin, AccountRulesEngine.getCurrentDailyLimit());
-        this.overdraftLimit = overdraftLimit;
+    public CurrentAccount(int accountNumber, String name, int age, double initialBalance) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, 0);
     }
 
     @Override
-    public void processDebit(double amount) throws AccountException {
-        if ((this.balance - amount) < -this.overdraftLimit) {
-            throw new InsufficientBalanceException("Overdraft limit of Rs " + overdraftLimit + " exceeded");
-        }
-        this.balance -= amount;
+    public String getAccountType() {
+        return "Current";
     }
 
-    public double getOverdraftLimit() { return overdraftLimit; }
+    @Override
+    public double getMinimumBalance() {
+        return AccountRulesEngine.getInstance().getMinimumBalance("CURRENT", tenureYears);
+    }
+
+    @Override
+    public double getInterestRate() {
+        return AccountRulesEngine.getInstance().getInterestRate("CURRENT", tenureYears);
+    }
+
+    @Override
+    public boolean canWithdraw(double amount) {
+        return (this.balance - amount) >= getMinimumBalance();
+    }
 }

@@ -1,22 +1,33 @@
 package com.gdb.domain;
 
-import com.gdb.exceptions.*;
+import com.gdb.exceptions.InvalidAgeException;
 
-public class FixedDepositAccount extends AbstractAccount {
-    private int tenureMonths;
-    private double interestRate;
+public class FixedDepositAccount extends Account {
+    public FixedDepositAccount(int accountNumber, String name, int age, double initialBalance, int tenureYears) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, tenureYears);
+    }
 
-    public FixedDepositAccount(String accountNumber, String name, int age, double balance, String status, String pin, int tenureMonths, double interestRate) {
-        super(accountNumber, name, age, balance, "FIXED_DEPOSIT", status, pin, AccountRulesEngine.getFDDailyLimit());
-        this.tenureMonths = tenureMonths;
-        this.interestRate = interestRate;
+    public FixedDepositAccount(int accountNumber, String name, int age, double initialBalance) throws InvalidAgeException {
+        super(accountNumber, name, age, initialBalance, 0);
     }
 
     @Override
-    public void processDebit(double amount) throws AccountException {
-        throw new AccountException("Premature withdrawal not allowed on Fixed Deposit account " + accountNumber + ". Tenure: " + tenureMonths + " months.");
+    public String getAccountType() {
+        return "FixedDeposit";
     }
 
-    public int getTenureMonths() { return tenureMonths; }
-    public double getInterestRate() { return interestRate; }
+    @Override
+    public double getMinimumBalance() {
+        return AccountRulesEngine.getInstance().getMinimumBalance("FIXEDDEPOSIT", tenureYears);
+    }
+
+    @Override
+    public double getInterestRate() {
+        return AccountRulesEngine.getInstance().getInterestRate("FIXEDDEPOSIT", tenureYears);
+    }
+
+    @Override
+    public boolean canWithdraw(double amount) {
+        return false;
+    }
 }

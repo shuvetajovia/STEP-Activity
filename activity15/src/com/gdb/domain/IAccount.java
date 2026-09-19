@@ -3,24 +3,23 @@ package com.gdb.domain;
 import com.gdb.exceptions.*;
 
 public interface IAccount {
-    String getAccountNumber();
-    String getName();
-    int getAge();
+    void deposit(double amount) throws InactiveAccountException, InvalidAmountException;
+    void withdraw(double amount, int pin) throws InactiveAccountException, InvalidPinException, InvalidAmountException, InsufficientBalanceException;
+    void closeAccount() throws InactiveAccountException;
+    void reopenAccount() throws InactiveAccountException;
+    void setPin(int pin) throws InvalidPinException;
+    boolean verifyPin(int pin);
+    boolean hasPin();
+    boolean isActive();
+    boolean canWithdraw(double amount);
+    String getAccountInfo();
+    int getAccountNumber();
+    String getAccountHolderName();
     double getBalance();
+    String getOpeningDate();
+    int getTenureYears();
+    void setTenureYears(int tenureYears);
     String getAccountType();
-    String getStatus();
-    boolean validatePin(String enteredPin);
-    boolean changePin(String oldPin, String newPin);
-    void deposit(double amount) throws InvalidAmountException;
-    void withdraw(double amount, String enteredPin) throws AccountException;
-    
-    // Daily Transfer Limit Methods (Activity 15)
-    double getDailyLimit();
-    double getRemainingDailyLimit();
-    boolean canTransfer(double amount);
-    void updateDailyTransferred(double amount);
-    void resetDailyLimitIfNewDay();
-    double getTransferredToday();
-    
-    void displayAccountInfo();
+    double getMinimumBalance();
+    double getInterestRate();
 }

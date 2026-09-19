@@ -54,7 +54,7 @@ public class Run {
             try {
                 javaFiles = Files.walk(srcDir.toPath())
                         .filter(p -> p.toString().endsWith(".java"))
-                        .map(Path::toString)
+                        .map(p -> p.toAbsolutePath().toString())
                         .collect(Collectors.toList());
             } catch (IOException e) {
                 System.err.println("Error reading files for " + actDir + ": " + e.getMessage());
@@ -122,7 +122,7 @@ public class Run {
             case 14:
                 return "com.gdb.tests.TestAccountRulesEngineProperties";
             case 15:
-                return "com.gdb.tests.TestTransferService";
+                return "com.gdb.tests.TestTransfer";
             default:
                 return null;
         }

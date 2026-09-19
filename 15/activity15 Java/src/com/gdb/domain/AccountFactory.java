@@ -1,28 +1,40 @@
 package com.gdb.domain;
 
+import com.gdb.exceptions.InvalidAccountTypeException;
+import com.gdb.exceptions.InvalidAgeException;
+import com.gdb.exceptions.MinimumBalanceViolationException;
+
 public class AccountFactory {
-    public static IAccount createAccount(String type, String accNum, String name, int age, double balance, String pin) {
-        return createAccount(type, accNum, name, age, balance, "ACTIVE", pin, 0);
-    }
-
-    public static IAccount createAccount(String type, String accNum, String name, int age, double balance, String status, String pin) {
-        return createAccount(type, accNum, name, age, balance, status, pin, 0);
-    }
-
-    public static IAccount createAccount(String type, String accNum, String name, int age, double balance, String status, String pin, int tenureYears) {
-        if (type == null) return null;
-        switch (type.toUpperCase()) {
-            case "SAVINGS":
-                return new SavingsAccount(accNum, name, age, balance, status, pin, tenureYears);
-            case "CURRENT":
-                return new CurrentAccount(accNum, name, age, balance, status, pin, 25000.0);
-            case "FIXED_DEPOSIT":
-            case "FD":
-                return new FixedDepositAccount(accNum, name, age, balance, status, pin, 12, 6.5);
-            case "SALARY":
-                return new SalaryAccount(accNum, name, age, balance, status, pin, "TechCorp");
-            default:
-                throw new IllegalArgumentException("Unknown account type: " + type);
+    public static IAccount createAccount(String accountType, int accountNumber, String name, int age, double initialBalance, int tenureYears)
+            throws InvalidAgeException, InvalidAccountTypeException, MinimumBalanceViolationException {
+        if (accountType == null) {
+            throw new InvalidAccountTypeException("Account type cannot be null");
         }
+        String t = accountType.toUpperCase().replace(" ", "").replace("_", "");
+        IAccount acc;
+        if ("SAVINGS".equals(t)) {
+            acc = new SavingsAccount(accountNumber, name, age, initialBalance, tenureYears);
+        } else if ("CURRENT".equals(t)) {
+            acc = new CurrentAccount(accountNumber, name, age, initialBalance, tenureYears);
+        } else if ("FIXEDDEPOSIT".equals(t) || "FD".equals(t)) {
+            acc = new FixedDepositAccount(accountNumber, name, age, initialBalance, tenureYears);
+        } else if ("SALARY".equals(t)) {
+            acc = new SalaryAccount(accountNumber, name, age, initialBalance, tenureYears);
+        } else {
+            throw new InvalidAccountTypeException("Unsupported account type: " + accountType);
+        }
+
+        if (initialBalance < acc.getMinimumBalance()) {
+            throw new MinimumBalanceViolationException(
+                String.format("Initial balance Rs. %,.2f is below minimum required Rs. %,.2f",
+                    initialBalance, acc.getMinimumBalance())
+            );
+        }
+        return acc;
+    }
+
+    public static IAccount createAccount(String accountType, int accountNumber, String name, int age, double initialBalance)
+            throws InvalidAgeException, InvalidAccountTypeException, MinimumBalanceViolationException {
+        return createAccount(accountType, accountNumber, name, age, initialBalance, 0);
     }
 }
